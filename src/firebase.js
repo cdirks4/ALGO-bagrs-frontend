@@ -1,6 +1,10 @@
 // Import the functions you need from the SDKs you need
+
 import { initializeApp } from 'firebase/app';
 import { getAnalytics } from 'firebase/analytics';
+import { getApp } from 'firebase/app';
+import { getFirestore, collection, getDocs } from 'firebase/firestore/lite';
+import { getStorage, ref } from 'firebase/storage';
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -19,3 +23,37 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
+
+const firebaseApp = getApp();
+const storage = getStorage(firebaseApp, 'gs://products-bucket');
+
+const db = getFirestore(app);
+
+// Get a list of cities from your database
+async function getCities(db) {
+	const citiesCol = collection(db, 'cities');
+	const citySnapshot = await getDocs(citiesCol);
+	const cityList = citySnapshot.docs.map((doc) => doc.data());
+	return cityList;
+}
+
+// Points to the root reference
+const storageRef = ref(storage);
+
+// Points to 'images'
+const imagesRef = ref(storageRef, 'images');
+
+// Points to 'images/space.jpg'
+// Note that you can use variables to create child values
+const fileName = 'space.jpg';
+const spaceRef = ref(imagesRef, fileName);
+
+// File path is 'images/space.jpg'
+const path = spaceRef.fullPath;
+
+// File name is 'space.jpg'
+const name = spaceRef.name;
+
+// Points to 'images'
+const imagesRefAgain = spaceRef.parent;
+export default app;
