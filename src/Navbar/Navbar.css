@@ -1,0 +1,11 @@
+a {
+	text-decoration: none !important;
+	color: white;
+}
+a:hover {
+	color: lightblue !important;
+	box-shadow: 5px lightblue !important;
+}
+.search {
+	min-width: 250px;
+}

@@ -8,6 +8,7 @@ import {
 import app from '../firebase';
 import { Link } from 'react-router-dom';
 const Signup = () => {
+	const [error, setError] = useState();
 	const emailRef = useRef();
 	const passwordRef = useRef();
 	const passwordConfirmRef = useRef();
@@ -27,6 +28,7 @@ const Signup = () => {
 		} catch (error) {
 			const errorCode = error.code;
 			const errorMessage = error.message;
+			setError(errorMessage);
 		}
 	};
 	return (
@@ -45,18 +47,14 @@ const Signup = () => {
 						</Form.Group>
 						<Form.Group id='password-confirm'>
 							<Form.Label>Password Confirmation</Form.Label>
-							<Form.Control
-								type='password-confirm'
-								ref={passwordConfirmRef}
-								required
-							/>
+							<Form.Control type='password' ref={passwordConfirmRef} required />
 						</Form.Group>
-						<div style={{ height: '5px' }}></div>
-						<Button className='w-100' type='submit'>
+						<Button className='w-100 mt-3' type='submit'>
 							Sign Up
 						</Button>
 					</Form>
 				</Card.Body>
+				{error && <h2>{error}</h2>}
 			</Card>
 			<div className='w-100 text-center mt-2'>
 				{' '}

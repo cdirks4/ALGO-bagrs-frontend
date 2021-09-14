@@ -1,6 +1,7 @@
 import React from 'react';
 import { useRef, useState } from 'react';
-import { Form, Button, Card, Container } from 'react-bootstrap';
+import { Form, Button, Card, Container, Spinner } from 'react-bootstrap';
+import { useHistory } from 'react-router';
 import app from '../firebase';
 import { Link } from 'react-router-dom';
 import {
@@ -8,42 +9,52 @@ import {
 	signInWithEmailAndPassword,
 	sendEmailVerification,
 } from 'firebase/auth';
+import { load } from 'protobufjs/minimal';
+
 const Signin = () => {
+	const [loading, setLoading] = useState(false);
+	const [validUser, setValidUser] = useState(null);
+	const [error, setError] = useState(false);
 	const emailRef = useRef();
 	const passwordRef = useRef();
-	const passwordConfirmRef = useRef();
+	const history = useHistory();
 
 	const auth = getAuth();
 
 	const handleSubmit = async (e) => {
-		e.preventDefault(e);
+		e.preventDefault();
+		setLoading(true);
 		try {
 			const user = await signInWithEmailAndPassword(
 				auth,
-				emailRef,
-				passwordRef
+				emailRef.current.value,
+				passwordRef.current.value
 			);
-			const emailSent = sendEmailVerification(auth.user);
+			console.log(user);
+			setValidUser(user);
+			setLoading(false);
 		} catch (error) {
+			setError(error.message);
 			const errorCode = error.code;
 			const errorMessage = error.message;
 		}
 	};
 
-	const user = auth.currentUser;
-	if (user !== null) {
+	if (validUser !== null) {
 		// The user object has basic properties such as display name, email, etc.
-		const displayName = user.displayName;
-		const email = user.email;
-		const photoURL = user.photoURL;
-		const emailVerified = user.emailVerified;
+		const displayName = validUser.displayName;
+		const email = validUser.email;
+		const photoURL = validUser.photoURL;
+		const emailVerified = validUser.emailVerified;
 
 		// The user's ID, unique to the Firebase project. Do NOT use
 		// this value to authenticate with your backend server, if
 		// you have one. Use User.getToken() instead.
-		const uid = user.uid;
+		const uid = validUser.uid;
 	}
-	console.log(user);
+	if (validUser && !loading) {
+		history.push('/coinchart');
+	}
 	return (
 		<Container>
 			<div className='w-100' style={{ maxWidth: '400px', minHeight: '500px' }}>
@@ -59,23 +70,18 @@ const Signin = () => {
 								<Form.Label>Password</Form.Label>
 								<Form.Control type='password' ref={passwordRef} required />
 							</Form.Group>
-							<Form.Group id='password-confirm'>
-								<Form.Label>Password Confirmation</Form.Label>
-								<Form.Control
-									type='password-confirm'
-									ref={passwordConfirmRef}
-									required
-								/>
-							</Form.Group>
-							<div style={{ height: '5px' }}></div>
-							<Button className='w-100' type='submit'>
-								Sign Up
-							</Button>
+							{loading ? (
+								<Spinner animation='border' />
+							) : (
+								<Button className='w-100 mt-2' type='submit'>
+									Sign In
+								</Button>
+							)}
+							{error && <p>{error}</p>}
 						</Form>
 					</Card.Body>
 				</Card>
 				<div className='w-100 text-center mt-2'>
-					{' '}
 					Need an account? <Link to='/signup'>Sign up</Link>
 				</div>
 			</div>
