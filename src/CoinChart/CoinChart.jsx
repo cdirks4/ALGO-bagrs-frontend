@@ -22,7 +22,6 @@ const CoinChart = () => {
 			);
 			setCoins(coin);
 		} else {
-			console.log('hello');
 			const coin = await coins.sort((a, b) =>
 				a[e.target.id] > b[e.target.id] ? -1 : 1
 			);
