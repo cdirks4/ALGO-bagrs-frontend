@@ -37,30 +37,33 @@ const CoinChart = () => {
 				<Row className='border-bottom d-flex align-items-center'>
 					<Col>
 						<div
+							className='link'
 							id='market_cap_rank'
 							onClick={(e) => handleClick(e)}
 							style={{ color: 'black' }}>
-							Rank
+							Market Cap
 						</div>
 					</Col>
 					<Col>
-						<div style={{ color: 'black' }}>logo</div>
+						<div style={{ color: 'black' }}>Logo</div>
 					</Col>
 					<Col>
 						<div id='name' style={{ color: 'black' }}>
-							name
+							Name
 						</div>
 					</Col>
 					<Col>
 						<div
+							className='link'
 							style={{ color: 'black' }}
 							id='current_price'
 							onClick={(e) => handleClick(e)}>
-							price
+							Price
 						</div>
 					</Col>
 					<Col>
 						<div
+							className='link'
 							id='price_change_percentage_1h_in_currency'
 							style={{ color: 'black' }}
 							onClick={(e) => handleClick(e)}>
@@ -70,6 +73,7 @@ const CoinChart = () => {
 					<Col>
 						<div
 							id='price_change_percentage_24h_in_currency'
+							className='link'
 							style={{ color: 'black' }}
 							onClick={(e) => handleClick(e)}>
 							24hr
@@ -83,7 +87,7 @@ const CoinChart = () => {
 					coins.map((coin) => {
 						return (
 							<Row className='border-bottom d-flex align-items-center'>
-								<Col className=''>{coin.market_cap_rank}</Col>
+								<Col className=''>#{coin.market_cap_rank}</Col>
 								<Col className='w-20 '>
 									<img src={coin.image} alt={coin.name} className='logo' />
 								</Col>
