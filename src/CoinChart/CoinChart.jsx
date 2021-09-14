@@ -8,10 +8,11 @@ const CoinChart = () => {
 	const [loading, setLoading] = useState(false);
 	const [coins, setCoins] = useState();
 	const [currentUser, setCurrentUser] = useState();
+	const [page, setPage] = useState(1);
 	const auth = getAuth();
 	useEffect(() => {
 		auth.onAuthStateChanged((user) => setCurrentUser(user));
-		api.getCoins().then((res) => setCoins(res));
+		api.getCoins(page).then((res) => setCoins(res));
 	}, []);
 
 	const handleClick = async (e) => {
@@ -99,6 +100,7 @@ const CoinChart = () => {
 					})
 				)}
 			</Container>
+			<></>
 		</>
 	);
 };
