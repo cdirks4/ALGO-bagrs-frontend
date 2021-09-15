@@ -14,8 +14,10 @@ import {
 import './CoinChart.css';
 import { getAuth } from 'firebase/auth';
 import { Link } from 'react-router-dom';
+import Chart from '../Chart/Chart';
 const CoinChart = ({ input }) => {
 	const [loading, setLoading] = useState(false);
+	const [id, setId] = useState();
 	const [coins, setCoins] = useState();
 	const [currentUser, setCurrentUser] = useState();
 	const [page, setPage] = useState(1);
@@ -45,10 +47,15 @@ const CoinChart = ({ input }) => {
 		setLoading(false);
 	};
 
-	const toggleModal = async (e) => {
-		const coin = await api.getCoinById(e.target.id);
-		setTargetCoin(coin);
+	const closeModal = () => {
 		setModal(!modal);
+	};
+
+	const toggleModal = async (e) => {
+		setId(e.target.id);
+		const coin = await api.getCoinById(e.target.id);
+		setModal(true);
+		setTargetCoin(coin);
 	};
 	return (
 		<>
@@ -107,10 +114,10 @@ const CoinChart = ({ input }) => {
 						.filter((coin) => {
 							if (input === '') {
 								return coin;
-							} else if (coin.symbol.includes(input.toLowerCase())) {
+							} else if (coin.symbol.includes(input?.toLowerCase())) {
 								return coin;
 							} else if (
-								coin.name.toLowerCase().includes(input.toLowerCase())
+								coin.name.toLowerCase().includes(input?.toLowerCase())
 							) {
 								return coin;
 							}
@@ -152,16 +159,10 @@ const CoinChart = ({ input }) => {
 						})
 				)}
 			</Container>
-			<Modal show={modal} toggle={toggleModal}>
+			<Modal show={targetCoin && modal} toggle={toggleModal}>
 				<ModalBody>
-					<Form onSubmit={() => {}}>
-						<FormGroup>{targetCoin?.name}</FormGroup>
-						<FormGroup></FormGroup>
-						<FormGroup></FormGroup>
-						<Button type='submit' value='submit' color='primary'>
-							buy
-						</Button>
-					</Form>
+					<Button onClick={closeModal}>x</Button>
+					<Chart id={id} />
 				</ModalBody>
 			</Modal>
 		</>
