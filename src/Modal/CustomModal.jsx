@@ -10,14 +10,32 @@ import {
 	Form,
 	FormGroup,
 } from 'react-bootstrap';
+import * as portApi from '../apiCalls/portfolioCalls';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import Chart from '../Chart/Chart';
 const CustomModal = ({ setModal, modal, id, targetCoin }) => {
 	const purchaseRef = useRef();
+	const [userId, setUserId] = useState();
 	const [days, setDays] = useState(1);
 	const [purchaseAmount, setPurchaseAmount] = useState(0);
+	const [loading, setLoading] = useState(false);
 	const closeModal = () => {
 		setModal(!modal);
 	};
+
+	const auth = getAuth();
+	onAuthStateChanged(auth, (user) => {
+		if (user) {
+			// User is signed in, see docs for a list of available properties
+			// https://firebase.google.com/docs/reference/js/firebase.User
+			const uid = user.uid;
+			// ...
+			setUserId(uid);
+		} else {
+			// User is signed out
+			// ...
+		}
+	});
 	useEffect(() => {}, []);
 
 	const handleChange = (e) => {
@@ -25,7 +43,14 @@ const CustomModal = ({ setModal, modal, id, targetCoin }) => {
 			e.target.value / targetCoin.market_data.current_price.usd
 		);
 	};
-	const handleSubmit = () => {};
+	const handleSubmit = (e) => {
+		e.preventDefault();
+		portApi.postPortfolio(
+			{ title: targetCoin.name, amount: purchaseRef, shares: purchaseAmount },
+			userId
+		);
+		setLoading(true);
+	};
 	return (
 		<Modal
 			show={targetCoin && modal}
@@ -51,8 +76,8 @@ const CustomModal = ({ setModal, modal, id, targetCoin }) => {
 						/>
 						<Form.Text className='text-muted'>
 							You are purchasing {purchaseAmount.toFixed(3)}{' '}
-							{`${targetCoin.name} `}
-							at {targetCoin && targetCoin.market_data.current_price.usd} per
+							{`${targetCoin && targetCoin.name} `}
+							at {targetCoin && targetCoin.market_data.current_price.usd}$ per
 							coin
 						</Form.Text>
 					</Form.Group>
@@ -60,9 +85,7 @@ const CustomModal = ({ setModal, modal, id, targetCoin }) => {
 					<Form.Group className='mb-3' controlId='formBasicCheckbox'>
 						<Form.Check type='checkbox' label='Confirm' />
 					</Form.Group>
-					<Button variant='primary' type='submit'>
-						Checkout
-					</Button>
+					<Button variant='primary'>Checkout</Button>
 				</Form>
 			</ModalBody>
 		</Modal>

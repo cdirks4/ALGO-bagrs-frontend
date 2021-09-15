@@ -49,7 +49,7 @@ const Chart = ({ id, days }) => {
 						labels: arr,
 						datasets: [
 							{
-								label: 'Market Value',
+								label: 'Market Value USD',
 								data: chartData,
 								borderColor: 'rgb(75, 192, 192)',
 								backgroundColor: 'rgb(75, 192, 192,0.3)',
