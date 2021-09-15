@@ -1,20 +1,12 @@
-import React, { useState, useEffect, useParams } from 'react';
+import React, { useState, useEffect, useParams, useRef } from 'react';
 import * as api from '../apiCalls/coingecko';
-import {
-	Card,
-	Container,
-	Row,
-	Col,
-	Button,
-	Modal,
-	ModalBody,
-	Form,
-	FormGroup,
-} from 'react-bootstrap';
+import { Container, Row, Col, Button } from 'react-bootstrap';
 import './CoinChart.css';
 import { getAuth } from 'firebase/auth';
 import { Link } from 'react-router-dom';
 import Chart from '../Chart/Chart';
+import CustomModal from '../Modal/CustomModal';
+
 const CoinChart = ({ input }) => {
 	const [loading, setLoading] = useState(false);
 	const [id, setId] = useState();
@@ -24,6 +16,8 @@ const CoinChart = ({ input }) => {
 	const auth = getAuth();
 	const [modal, setModal] = useState(false);
 	const [targetCoin, setTargetCoin] = useState(null);
+	const [days, setDays] = useState(1);
+	const purchaseRef = useRef(null);
 
 	useEffect(() => {
 		auth.onAuthStateChanged((user) => setCurrentUser(user));
@@ -47,16 +41,13 @@ const CoinChart = ({ input }) => {
 		setLoading(false);
 	};
 
-	const closeModal = () => {
-		setModal(!modal);
-	};
-
 	const toggleModal = async (e) => {
 		setId(e.target.id);
 		const coin = await api.getCoinById(e.target.id);
 		setModal(true);
 		setTargetCoin(coin);
 	};
+	console.log(targetCoin);
 	return (
 		<>
 			<Container className='border border-primary mt-4 rounded'>
@@ -158,19 +149,13 @@ const CoinChart = ({ input }) => {
 							);
 						})
 				)}
-				<Chart id={id} />
 			</Container>
-			<Modal
-				show={targetCoin && modal}
-				toggle={toggleModal}
-				style={{
-					width: '700px',
-					height: '700px',
-				}}>
-				<ModalBody>
-					<Button onClick={closeModal}>x</Button>
-				</ModalBody>
-			</Modal>
+			<CustomModal
+				setModal={setModal}
+				modal={modal}
+				id={id}
+				targetCoin={targetCoin}
+			/>
 		</>
 	);
 };

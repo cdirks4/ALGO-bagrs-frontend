@@ -18,10 +18,10 @@ export const getCoinById = async (id) => {
 		console.log(error);
 	}
 };
-export const getCoinChartById = async (id, days = 1) => {
+export const getCoinChartById = async (id, days = 1, interval = 'hourly') => {
 	try {
 		const coin = await fetch(
-			`  https://api.coingecko.com/api/v3/coins/${id}/market_chart?vs_currency=usd&days=${days}&interval=hourly`
+			`  https://api.coingecko.com/api/v3/coins/${id}/market_chart?vs_currency=usd&days=${days}&interval=${interval}`
 		);
 		return coin.json();
 	} catch (error) {

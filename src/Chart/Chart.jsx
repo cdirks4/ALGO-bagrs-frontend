@@ -2,9 +2,9 @@ import React, { useEffect, useState, useHistory, useRef } from 'react';
 
 import { Bar, Doughnut, Line } from 'react-chartjs-2';
 import * as api from '../apiCalls/coingecko';
-const Chart = ({ id }) => {
+const Chart = ({ id, days }) => {
 	const chartRef = useRef();
-	const [days, setDays] = useState(1);
+
 	const [chartData, setChartData] = useState();
 	const [loading, setLoading] = useState(false);
 	const formatData = (data) => {
@@ -15,39 +15,58 @@ const Chart = ({ id }) => {
 			};
 		});
 	};
-	let data = null;
-	useEffect(() => {
-		api
-			.getCoinChartById(id, days)
-			.then((res) => setChartData(formatData(res.prices)));
 
+	let arr = [];
+	const createAxis = (data, days) => {
+		let i = 0;
+		console.log(days);
+		for (let i = 0; i < data.length; i++) {
+			if (days >= 30) {
+				arr.push(`${i}d`);
+			} else {
+				arr.push(`${i}hr`);
+			}
+		}
+		arr.reverse();
+	};
+	useEffect(() => {
+		let interval = 'hourly';
+
+		if (days >= 30) {
+			interval = 'daily';
+		}
+		api
+			.getCoinChartById(id, days, interval)
+			.then((res) => setChartData(formatData(res.prices)));
 		setLoading(false);
 	}, [days, id]);
-	let arr = [];
-	for (let i = 0; i < chartData.length; i++) {
-		arr.push(`${i}hr`);
-	}
-	arr.reverse();
-	console.log(arr);
+	chartData && createAxis(chartData, days);
 	return (
-		<>
-			<Line
-				data={{
-					labels: arr,
-					datasets: [
-						{
-							data: chartData,
+		!loading && (
+			<>
+				<Line
+					data={{
+						labels: arr,
+						datasets: [
+							{
+								label: 'Market Value',
+								data: chartData,
+								borderColor: 'rgb(75, 192, 192)',
+								backgroundColor: 'rgb(75, 192, 192,0.3)',
+								fill: true,
+								pointRadius: 0,
+							},
+						],
+						options: {
+							parsing: {
+								xAxisKey: 'x',
+								yAxisKey: 'y',
+							},
 						},
-					],
-					options: {
-						parsing: {
-							xAxisKey: 'x',
-							yAxisKey: 'y',
-						},
-					},
-				}}
-			/>{' '}
-		</>
+					}}
+				/>{' '}
+			</>
+		)
 	);
 };
 
