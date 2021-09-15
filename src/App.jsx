@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Container } from 'react-bootstrap';
 import Signup from './Signup/Signup';
 import { Switch, Route } from 'react-router-dom';
@@ -6,16 +6,17 @@ import Signin from './Signup/Signin';
 import CoinChart from './CoinChart/CoinChart';
 import NavbarComponent from './Navbar/NavbarComponent';
 const App = () => {
+	const [input, setInput] = useState('');
 	return (
 		<>
 			<Switch>
 				<Route path='/'>
-					<NavbarComponent />
+					<NavbarComponent input={input} setInput={setInput} />
 				</Route>
 			</Switch>
 			<Switch>
 				<Route path='/coinchart'>
-					<CoinChart />
+					<CoinChart input={input} />
 				</Route>
 			</Switch>
 			<Switch>

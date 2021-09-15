@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react';
-import { Form, Button, Card } from 'react-bootstrap';
+import { useHistory } from 'react-router-dom';
+import { Form, Button, Card, Spinner } from 'react-bootstrap';
 import {
 	getAuth,
 	createUserWithEmailAndPassword,
@@ -9,28 +10,41 @@ import app from '../firebase';
 import { Link } from 'react-router-dom';
 const Signup = () => {
 	const [error, setError] = useState();
+	const [validUser, setValidUser] = useState();
+	const [loading, setLoading] = useState(false);
 	const emailRef = useRef();
 	const passwordRef = useRef();
 	const passwordConfirmRef = useRef();
-
+	const history = useHistory();
 	const auth = getAuth();
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		try {
-			const userCrediential = await createUserWithEmailAndPassword(
-				auth,
-				emailRef.current.value,
-				passwordRef.current.value
-			);
-			const user = userCrediential.user;
-			const emailSent = await sendEmailVerification(auth.user);
+			setLoading(true);
+			if (passwordRef.current.value === passwordConfirmRef.current.value) {
+				const userCrediential = await createUserWithEmailAndPassword(
+					auth,
+					emailRef.current.value,
+					passwordRef.current.value
+				);
+				const user = userCrediential.user;
+				setValidUser(user);
+				setLoading(false);
+				const emailSent = await sendEmailVerification(auth.user);
+			} else {
+				throw new Error('your passwords do not match');
+			}
 		} catch (error) {
+			setLoading(false);
 			const errorCode = error.code;
 			const errorMessage = error.message;
 			setError(errorMessage);
 		}
 	};
+	if (validUser && !loading) {
+		history.push('/coinchart');
+	}
 	return (
 		<>
 			<Card>
@@ -49,12 +63,16 @@ const Signup = () => {
 							<Form.Label>Password Confirmation</Form.Label>
 							<Form.Control type='password' ref={passwordConfirmRef} required />
 						</Form.Group>
-						<Button className='w-100 mt-3' type='submit'>
-							Sign Up
-						</Button>
+						{loading ? (
+							<Spinner animation='border' />
+						) : (
+							<Button className='w-100 mt-2' type='submit'>
+								Sign Up
+							</Button>
+						)}
 					</Form>
 				</Card.Body>
-				{error && <h2>{error}</h2>}
+				{error && <p style={{ color: 'red', fontSize: '12px' }}>{error}</p>}
 			</Card>
 			<div className='w-100 text-center mt-2'>
 				{' '}

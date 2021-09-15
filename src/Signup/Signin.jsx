@@ -34,6 +34,7 @@ const Signin = () => {
 			setValidUser(user);
 			setLoading(false);
 		} catch (error) {
+			setLoading(false);
 			setError(error.message);
 			const errorCode = error.code;
 			const errorMessage = error.message;
@@ -77,12 +78,14 @@ const Signin = () => {
 									Sign In
 								</Button>
 							)}
-							{error && <p>{error}</p>}
+							{error && (
+								<p style={{ color: 'red', fontSize: '12px' }}>{error}</p>
+							)}
 						</Form>
 					</Card.Body>
 				</Card>
 				<div className='w-100 text-center mt-2'>
-					Need an account? <Link to='/signup'>Sign up</Link>
+					Need an account? <Link to='/'>Sign up</Link>
 				</div>
 			</div>
 		</Container>

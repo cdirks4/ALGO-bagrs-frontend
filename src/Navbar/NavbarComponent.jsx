@@ -9,9 +9,13 @@ import {
 	Button,
 	Col,
 } from 'react-bootstrap';
+import { useRef } from 'react';
 import { Link } from 'react-router-dom';
 import './Navbar.css';
-const NavbarComponent = () => {
+const NavbarComponent = ({ input, setInput }) => {
+	const handleChange = (e) => {
+		setInput(e.target.value);
+	};
 	return (
 		<>
 			<>
@@ -47,6 +51,7 @@ const NavbarComponent = () => {
 									placeholder='Search'
 									className='search'
 									aria-label='Search'
+									onChange={handleChange}
 								/>
 								<Button variant='outline-success'>Search</Button>
 							</Form>
