@@ -158,11 +158,17 @@ const CoinChart = ({ input }) => {
 							);
 						})
 				)}
+				<Chart id={id} />
 			</Container>
-			<Modal show={targetCoin && modal} toggle={toggleModal}>
+			<Modal
+				show={targetCoin && modal}
+				toggle={toggleModal}
+				style={{
+					width: '700px',
+					height: '700px',
+				}}>
 				<ModalBody>
 					<Button onClick={closeModal}>x</Button>
-					<Chart id={id} />
 				</ModalBody>
 			</Modal>
 		</>
