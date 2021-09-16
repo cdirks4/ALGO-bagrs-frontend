@@ -14,7 +14,6 @@ const Portfolio = ({ currentUser, setCurrentUser }) => {
 
 	auth.onAuthStateChanged((user) => {
 		user ? setCurrentUser(user) : setCurrentUser(null);
-		console.log('hi');
 	});
 
 	useEffect(() => {

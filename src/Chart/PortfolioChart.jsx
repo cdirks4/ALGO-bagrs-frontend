@@ -12,6 +12,10 @@ const PortfolioChart = ({ portfolio, target }) => {
 	let marketValueObj = {};
 	let labels = [];
 
+	const findTotalPortfolio = async (data) => {
+		console.log(data);
+	};
+
 	const getChartData = async (data) => {
 		for (let i = 0; i < data.length; i++) {
 			const res = await api.getCoinChartById(data[i].geckoId, days, interval);
@@ -24,7 +28,7 @@ const PortfolioChart = ({ portfolio, target }) => {
 
 		return marketValueObj;
 	};
-	console.log(portfolio);
+	chartData && findTotalPortfolio(chartData);
 	useEffect(() => {
 		portfolio && getChartData(portfolio.coins).then((res) => setChartData(res));
 	}, [portfolio]);
