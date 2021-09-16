@@ -4,5 +4,9 @@
 a {
 }
 .link {
+	color: red;
+	text-decoration: none;
+}
+.link:hover {
 	text-decoration: underline;
 }

@@ -5,8 +5,17 @@ import { Switch, Route } from 'react-router-dom';
 import Signin from './Signup/Signin';
 import CoinChart from './CoinChart/CoinChart';
 import NavbarComponent from './Navbar/NavbarComponent';
+import Portfolio from './Portfolio/Portfolio';
+import { getAuth } from 'firebase/auth';
 const App = () => {
+	const [currentUser, setCurrentUser] = useState(null);
 	const [input, setInput] = useState('');
+	const auth = getAuth();
+
+	auth.onAuthStateChanged((user) => {
+		user ? setCurrentUser(user) : setCurrentUser(null);
+	});
+
 	return (
 		<>
 			<Switch>
@@ -43,6 +52,14 @@ const App = () => {
 							<Signin />
 						</div>
 					</Container>
+				</Route>
+			</Switch>
+			<Switch>
+				<Route path='/portfolio'>
+					<Portfolio
+						currentUser={currentUser}
+						setCurrentUser={setCurrentUser}
+					/>
 				</Route>
 			</Switch>
 		</>

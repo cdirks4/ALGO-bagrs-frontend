@@ -53,7 +53,6 @@ const NavbarComponent = ({ input, setInput }) => {
 									aria-label='Search'
 									onChange={handleChange}
 								/>
-								<Button variant='outline-success'>Search</Button>
 							</Form>
 						</Col>
 					</Row>

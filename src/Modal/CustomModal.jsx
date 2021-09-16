@@ -1,18 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
-import {
-	Card,
-	Container,
-	Row,
-	Col,
-	Button,
-	Modal,
-	ModalBody,
-	Form,
-	FormGroup,
-} from 'react-bootstrap';
+import { Button, Modal, ModalBody, Form } from 'react-bootstrap';
 import * as portApi from '../apiCalls/portfolioCalls';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import Chart from '../Chart/Chart';
+import ModalHeader from 'react-bootstrap/esm/ModalHeader';
+
 const CustomModal = ({ setModal, modal, id, targetCoin }) => {
 	const [api, setApi] = useState(false);
 	const purchaseRef = useRef();
@@ -27,14 +19,10 @@ const CustomModal = ({ setModal, modal, id, targetCoin }) => {
 	const auth = getAuth();
 	onAuthStateChanged(auth, (user) => {
 		if (user) {
-			// User is signed in, see docs for a list of available properties
-			// https://firebase.google.com/docs/reference/js/firebase.User
 			const uid = user.uid;
-			// ...
 			setUserId(uid);
 		} else {
-			// User is signed out
-			// ...
+			setUserId(null);
 		}
 	});
 	useEffect(() => {
@@ -53,8 +41,9 @@ const CustomModal = ({ setModal, modal, id, targetCoin }) => {
 			{
 				owner: userId,
 				title: targetCoin.name,
-				amount: purchaseRef.current.value,
+				ppc: targetCoin.market_data.current_price.usd,
 				shares: purchaseAmount,
+				geckoId: targetCoin.id,
 			},
 
 			userId
@@ -63,12 +52,10 @@ const CustomModal = ({ setModal, modal, id, targetCoin }) => {
 	};
 	api && handleSubmit();
 	return (
-		<Modal
-			show={targetCoin && modal}
-			style={{
-				width: '700px',
-				height: '700px',
-			}}>
+		<Modal show={targetCoin && modal}>
+			<ModalHeader style={{ textAlign: 'center' }}>
+				{targetCoin && targetCoin.name}
+			</ModalHeader>
 			<ModalBody>
 				<Button onClick={closeModal}>x</Button>
 				<Chart id={id} days={days} />
@@ -93,9 +80,6 @@ const CustomModal = ({ setModal, modal, id, targetCoin }) => {
 						</Form.Text>
 					</Form.Group>
 
-					<Form.Group className='mb-3' controlId='formBasicCheckbox'>
-						<Form.Check type='checkbox' label='Confirm' />
-					</Form.Group>
 					<Button variant='primary' onClick={() => setApi(true)}>
 						Checkout
 					</Button>

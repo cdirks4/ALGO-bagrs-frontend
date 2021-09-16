@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useHistory, useRef } from 'react';
 
-import { Bar, Doughnut, Line } from 'react-chartjs-2';
+import { Line } from 'react-chartjs-2';
 import * as api from '../apiCalls/coingecko';
 const Chart = ({ id, days }) => {
 	const chartRef = useRef();
@@ -18,8 +18,6 @@ const Chart = ({ id, days }) => {
 
 	let arr = [];
 	const createAxis = (data, days) => {
-		let i = 0;
-		console.log(days);
 		for (let i = 0; i < data.length; i++) {
 			if (days >= 30) {
 				arr.push(`${i}d`);

@@ -30,7 +30,7 @@ const Signin = () => {
 				emailRef.current.value,
 				passwordRef.current.value
 			);
-			console.log(user);
+
 			setValidUser(user);
 			setLoading(false);
 		} catch (error) {

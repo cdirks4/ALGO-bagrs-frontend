@@ -1,10 +1,8 @@
-import React, { useState, useEffect, useParams, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import * as api from '../apiCalls/coingecko';
 import { Container, Row, Col, Button } from 'react-bootstrap';
 import './CoinChart.css';
 import { getAuth } from 'firebase/auth';
-import { Link } from 'react-router-dom';
-import Chart from '../Chart/Chart';
 import CustomModal from '../Modal/CustomModal';
 
 const CoinChart = ({ input }) => {
@@ -16,17 +14,17 @@ const CoinChart = ({ input }) => {
 	const auth = getAuth();
 	const [modal, setModal] = useState(false);
 	const [targetCoin, setTargetCoin] = useState(null);
-	const [days, setDays] = useState(1);
-	const purchaseRef = useRef(null);
+
+	auth.onAuthStateChanged((user) => {
+		user ? setCurrentUser(user) : setCurrentUser(null);
+	});
 
 	useEffect(() => {
-		auth.onAuthStateChanged((user) => setCurrentUser(user));
 		api.getCoins(page).then((res) => setCoins(res));
-	}, []);
+	}, [page]);
 
 	const handleClick = async (e) => {
 		setLoading(true);
-		console.log(e.target.id);
 		if (e.target.id === 'market_cap_rank') {
 			const coin = await coins.sort((a, b) =>
 				a[e.target.id] > b[e.target.id] ? 1 : -1
@@ -47,10 +45,12 @@ const CoinChart = ({ input }) => {
 		setModal(true);
 		setTargetCoin(coin);
 	};
-	console.log(targetCoin);
+
 	return (
 		<>
-			<Container className='border border-primary mt-4 rounded'>
+			<Container
+				className='border border-light mt-4 rounded'
+				style={{ color: 'black' }}>
 				<Row className='border-bottom d-flex align-items-center'>
 					<Col>
 						<div
@@ -62,12 +62,12 @@ const CoinChart = ({ input }) => {
 						</div>
 					</Col>
 					<Col>
-						<div style={{ color: 'black' }}>Logo</div>
-					</Col>
-					<Col>
 						<div id='name' style={{ color: 'black' }}>
 							Symbol
 						</div>
+					</Col>
+					<Col>
+						<div style={{ color: 'black' }}>Logo</div>
 					</Col>
 					<Col>
 						<div
@@ -96,6 +96,7 @@ const CoinChart = ({ input }) => {
 							24hr
 						</div>
 					</Col>
+					<Col></Col>
 				</Row>
 				{loading ? (
 					<h1></h1>
@@ -136,15 +137,21 @@ const CoinChart = ({ input }) => {
 										className=''
 										style={{
 											color:
-												coin.price_change_percentage_1h_in_currency > 0
+												coin.price_change_percentage_24h_in_currency > 0
 													? 'green'
 													: 'red',
 										}}>
 										{coin.price_change_percentage_24h_in_currency.toFixed(3)}%
 									</Col>
-									<Button onClick={toggleModal} id={coin.id}>
-										buy
-									</Button>
+									<Col>
+										<Button
+											variant='secondary'
+											size='sm'
+											onClick={toggleModal}
+											id={coin.id}>
+											buy
+										</Button>
+									</Col>
 								</Row>
 							);
 						})
@@ -156,6 +163,25 @@ const CoinChart = ({ input }) => {
 				id={id}
 				targetCoin={targetCoin}
 			/>
+			<nav>
+				<ul class='pagination justify-content-center'>
+					<li class='page-item'>
+						<a class='page-link' href='#' onClick={() => setPage(1)}>
+							1
+						</a>
+					</li>
+					<li class='page-item'>
+						<a class='page-link' href='#' onClick={() => setPage(2)}>
+							2
+						</a>
+					</li>
+					<li class='page-item'>
+						<a class='page-link' href='#' onClick={() => setPage(3)}>
+							3
+						</a>
+					</li>
+				</ul>
+			</nav>
 		</>
 	);
 };

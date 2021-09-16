@@ -1,5 +1,5 @@
 export const postPortfolio = (userData, id) => {
-	fetch(`http://localhost:3000/api/portfolio/${id}`, {
+	fetch(`http://localhost:3000/api/portfolio/`, {
 		method: 'POST',
 		headers: { 'Content-type': 'application/json;charset=UTF-8' },
 
@@ -13,5 +13,11 @@ export const updatePortfolio = async (userData) => {
 		headers: { 'Content-type': 'application/json;charset=UTF-8' },
 		body: JSON.stringify(userData),
 	});
-	console.log(data);
+};
+
+export const showPortfolio = (id) => {
+	return fetch(`http://localhost:3000/api/portfolio/${id}`, {
+		method: 'GET',
+		headers: { 'Content-type': 'application/json;charset=UTF-8' },
+	}).then((res) => res.json());
 };

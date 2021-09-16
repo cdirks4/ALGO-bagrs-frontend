@@ -7,4 +7,5 @@ a:hover {
 }
 .search {
 	min-width: 250px;
+	color: rgba(204, 148, 230, 0.473);
 }
