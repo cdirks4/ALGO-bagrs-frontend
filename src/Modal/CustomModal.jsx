@@ -14,6 +14,7 @@ import * as portApi from '../apiCalls/portfolioCalls';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import Chart from '../Chart/Chart';
 const CustomModal = ({ setModal, modal, id, targetCoin }) => {
+	const [api, setApi] = useState(false);
 	const purchaseRef = useRef();
 	const [userId, setUserId] = useState();
 	const [days, setDays] = useState(1);
@@ -36,21 +37,31 @@ const CustomModal = ({ setModal, modal, id, targetCoin }) => {
 			// ...
 		}
 	});
-	useEffect(() => {}, []);
+	useEffect(() => {
+		setApi(false);
+		return setApi(false);
+	}, []);
 
 	const handleChange = (e) => {
 		setPurchaseAmount(
 			e.target.value / targetCoin.market_data.current_price.usd
 		);
 	};
-	const handleSubmit = (e) => {
-		e.preventDefault();
+	const handleSubmit = () => {
+		setApi(false);
 		portApi.postPortfolio(
-			{ title: targetCoin.name, amount: purchaseRef, shares: purchaseAmount },
+			{
+				owner: userId,
+				title: targetCoin.name,
+				amount: purchaseRef.current.value,
+				shares: purchaseAmount,
+			},
+
 			userId
 		);
 		setLoading(true);
 	};
+	api && handleSubmit();
 	return (
 		<Modal
 			show={targetCoin && modal}
@@ -85,7 +96,9 @@ const CustomModal = ({ setModal, modal, id, targetCoin }) => {
 					<Form.Group className='mb-3' controlId='formBasicCheckbox'>
 						<Form.Check type='checkbox' label='Confirm' />
 					</Form.Group>
-					<Button variant='primary'>Checkout</Button>
+					<Button variant='primary' onClick={() => setApi(true)}>
+						Checkout
+					</Button>
 				</Form>
 			</ModalBody>
 		</Modal>

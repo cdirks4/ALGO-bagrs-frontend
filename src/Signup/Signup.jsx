@@ -43,7 +43,7 @@ const Signup = () => {
 		}
 	};
 	if (validUser && !loading) {
-		history.push('/coinchart');
+		history.push('/signin');
 	}
 	return (
 		<>
