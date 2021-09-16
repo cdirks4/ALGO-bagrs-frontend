@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import * as api from '../apiCalls/coingecko';
 import { Container, Row, Col, Button } from 'react-bootstrap';
 import './CoinChart.css';
@@ -121,7 +122,11 @@ const CoinChart = ({ input }) => {
 									<Col className='w-20 '>
 										<img src={coin.image} alt={coin.name} className='logo' />
 									</Col>
-									<Col className=''>{coin.symbol.toUpperCase()}</Col>
+									<Col className=''>
+										<Link to={`/details/${coin.id}`}>
+											{coin.symbol.toUpperCase()}
+										</Link>
+									</Col>
 									<Col className=''>{coin.current_price}</Col>
 									<Col
 										className=''

@@ -7,6 +7,7 @@ import CoinChart from './CoinChart/CoinChart';
 import NavbarComponent from './Navbar/NavbarComponent';
 import Portfolio from './Portfolio/Portfolio';
 import { getAuth } from 'firebase/auth';
+import CoinDetails from './CoinDetails/CoinDetails';
 const App = () => {
 	const [currentUser, setCurrentUser] = useState(null);
 	const [input, setInput] = useState('');
@@ -60,6 +61,11 @@ const App = () => {
 						currentUser={currentUser}
 						setCurrentUser={setCurrentUser}
 					/>
+				</Route>
+			</Switch>
+			<Switch>
+				<Route exact path='/details/:id'>
+					<CoinDetails />
 				</Route>
 			</Switch>
 		</>
