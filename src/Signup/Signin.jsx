@@ -9,9 +9,8 @@ import {
 	signInWithEmailAndPassword,
 	sendEmailVerification,
 } from 'firebase/auth';
-import { load } from 'protobufjs/minimal';
 
-const Signin = () => {
+const Signin = ({ currentUser, setCurrentUser }) => {
 	const [loading, setLoading] = useState(false);
 	const [validUser, setValidUser] = useState(null);
 	const [error, setError] = useState(false);
@@ -54,6 +53,7 @@ const Signin = () => {
 		const uid = validUser.uid;
 	}
 	if (validUser && !loading) {
+		setCurrentUser(validUser);
 		history.push('/coinchart');
 	}
 	return (

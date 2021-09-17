@@ -41,10 +41,12 @@ const PortfolioChart = ({ portfolio, target, setTarget }) => {
 	};
 	chartData && findTotalPortfolio(chartData);
 	useEffect(() => {
-		if (!target && portfolio) {
-			setTarget(portfolio.coins[0].title);
+		if (!target && portfolio?.coins !== undefined) {
+			setTarget(portfolio?.coins[0].title);
 		}
-		portfolio && getChartData(portfolio.coins).then((res) => setChartData(res));
+		if (portfolio?.coins !== undefined) {
+			getChartData(portfolio.coins).then((res) => setChartData(res));
+		}
 	}, [portfolio, target]);
 	console.log(chartData);
 	return (

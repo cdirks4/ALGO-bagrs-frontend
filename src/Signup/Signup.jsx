@@ -8,7 +8,7 @@ import {
 } from 'firebase/auth';
 import app from '../firebase';
 import { Link } from 'react-router-dom';
-const Signup = () => {
+const Signup = ({ currentUser }) => {
 	const [error, setError] = useState();
 	const [validUser, setValidUser] = useState();
 	const [loading, setLoading] = useState(false);

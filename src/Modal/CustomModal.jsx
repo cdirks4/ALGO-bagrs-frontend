@@ -28,8 +28,8 @@ const CustomModal = ({
 	useEffect(() => {
 		currentUser &&
 			portApi
-				.showPortfolio(currentUser.uid)
-				.then((res) => setPortfolio(res.coins));
+				?.showPortfolio(currentUser.uid)
+				.then((res) => setPortfolio(res?.coins));
 	}, [currentUser]);
 
 	const handleChange = (e) => {
@@ -38,8 +38,6 @@ const CustomModal = ({
 		);
 	};
 	const handleSubmit = () => {
-		setBuy(false);
-		setLoading(true);
 		portApi.postPortfolio(
 			{
 				owner: currentUser.uid,
@@ -51,7 +49,8 @@ const CustomModal = ({
 
 			currentUser.uid
 		);
-		setModal(!modal);
+		setBuy(false);
+		setLoading(true);
 	};
 	console.log(purchaseAmount);
 	const getShares = async (portfolio) => {
@@ -72,7 +71,6 @@ const CustomModal = ({
 
 			currentUser.uid
 		);
-		setModal(!modal);
 	};
 
 	targetCoin && getShares(portfolio).then((res) => setShares(res));

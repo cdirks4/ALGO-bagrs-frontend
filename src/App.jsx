@@ -10,17 +10,18 @@ import { getAuth } from 'firebase/auth';
 import CoinDetails from './CoinDetails/CoinDetails';
 import * as portApi from './apiCalls/portfolioCalls';
 import * as api from './apiCalls/coingecko';
+import { setCurrentScreen } from '@firebase/analytics';
 const App = () => {
 	const [currentUser, setCurrentUser] = useState(null);
 	const [input, setInput] = useState('');
 	const auth = getAuth();
-	const [allCoins, setAllCoins] = useState();
+	const [allCoins, setAllCoins] = useState(null);
 	auth.onAuthStateChanged((user) => {
 		user ? setCurrentUser(user) : setCurrentUser(null);
 	});
 	const arr = [];
 	const getAllCoins = async (data) => {
-		for (let i = 0; i < data.length; i++) {
+		for (let i = 0; i < data?.length; i++) {
 			const num = await api.getCoinById(data[i].geckoId);
 			arr.push(num);
 		}
@@ -30,7 +31,7 @@ const App = () => {
 		currentUser &&
 			portApi
 				.showPortfolio(currentUser.uid)
-				.then((res) => getAllCoins(res.coins))
+				.then((res) => getAllCoins(res?.coins))
 				.then((res) => setAllCoins(res));
 	}, [currentUser]);
 
@@ -54,7 +55,7 @@ const App = () => {
 						<div
 							className='w-100'
 							style={{ maxWidth: '400px', minHeight: '500px' }}>
-							<Signup />
+							<Signup currentUser={currentUser} />
 						</div>
 					</Container>
 				</Route>
@@ -67,7 +68,10 @@ const App = () => {
 						<div
 							className='w-100'
 							style={{ maxWidth: '400px', minHeight: '500px' }}>
-							<Signin />
+							<Signin
+								currentUser={currentUser}
+								setCurrentUser={setCurrentUser}
+							/>
 						</div>
 					</Container>
 				</Route>

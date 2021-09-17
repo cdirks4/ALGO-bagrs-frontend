@@ -3,14 +3,14 @@ import { Link } from 'react-router-dom';
 import * as portApi from '../apiCalls/portfolioCalls';
 import { Container, Row, Col } from 'react-bootstrap';
 import PortfolioChart from '../Chart/PortfolioChart';
-const Portfolio = ({ currentUser, allCoins, input }) => {
+const Portfolio = ({ currentUser, allCoins }) => {
 	const [target, setTarget] = useState(null);
 	const [portfolio, setPortfolio] = useState();
 
 	useEffect(() => {
 		currentUser &&
 			portApi.showPortfolio(currentUser.uid).then((res) => setPortfolio(res));
-	}, [currentUser]);
+	}, [currentUser, allCoins]);
 
 	return !currentUser ? (
 		<h1>
@@ -33,16 +33,15 @@ const Portfolio = ({ currentUser, allCoins, input }) => {
 					<Col>24hr high</Col>
 				</Row>
 				{portfolio &&
-					portfolio.coins.map((coin, i) => {
-						console.log(coin);
+					portfolio.coins?.map((coin, i) => {
 						return (
 							<Row
 								onClick={() => setTarget(coin.title)}
 								className='border-bottom d-flex align-items-center'>
-								<Col>
+								{/* <Col>
 									<img
-										src={allCoins && allCoins[i].image?.small}
-										alt={allCoins && allCoins[i].name}
+										src={''}
+										alt={allCoins && allCoins[i]?.name}
 										className='logo'
 									/>
 								</Col>
@@ -55,11 +54,10 @@ const Portfolio = ({ currentUser, allCoins, input }) => {
 												? 'green'
 												: 'red',
 									}}>
-									{console.log(allCoins[i].market_data.current_price)}
 									{coin.ppc}
-								</Col>
+								</Col> */}
 								<Col>{coin.shares && coin.shares.toFixed(3)}</Col>
-								<Col>
+								{/* <Col>
 									{allCoins &&
 										`$${(
 											allCoins[i].market_data.current_price.usd * coin.shares
@@ -71,7 +69,7 @@ const Portfolio = ({ currentUser, allCoins, input }) => {
 										`$${(
 											allCoins[i].market_data.high_24h.usd * coin.shares
 										).toFixed(2)}`}
-								</Col>
+								</Col> */}
 							</Row>
 						);
 					})}

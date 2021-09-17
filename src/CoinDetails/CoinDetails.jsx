@@ -55,8 +55,8 @@ const CoinDetails = () => {
 					1y
 				</Button>
 			</Card>
-			<Container>
-				<Row>
+			<Container className='border border-secondary mt-4 rounded'>
+				<Row className='border-bottom d-flex align-items-center'>
 					<Col>Market Cap</Col>
 					<Col>Current Price</Col>
 					<Col>24hr High</Col>
@@ -64,8 +64,10 @@ const CoinDetails = () => {
 					<Col>24hr%</Col>
 					<Col>1hr%</Col>
 				</Row>
-				<Row>
-					<Col>{coinDetails?.market_data.market_cap.usd}</Col>
+				<Row className='border-bottom d-flex align-items-center'>
+					<Col style={{ color: 'green' }}>
+						{coinDetails?.market_data.market_cap.usd}
+					</Col>
 					<Col>{coinDetails?.market_data.current_price.usd}</Col>
 					<Col style={{ color: 'green' }}>
 						{coinDetails?.market_data.high_24h.usd}{' '}
