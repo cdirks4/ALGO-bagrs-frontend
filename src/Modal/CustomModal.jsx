@@ -5,30 +5,32 @@ import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import Chart from '../Chart/Chart';
 import ModalHeader from 'react-bootstrap/esm/ModalHeader';
 
-const CustomModal = ({ setModal, modal, id, targetCoin }) => {
-	const [api, setApi] = useState(false);
+const CustomModal = ({
+	setModal,
+	modal,
+	id,
+	targetCoin,
+	buySell,
+	currentUser,
+}) => {
+	const [portfolio, setPortfolio] = useState();
+	const [sell, setSell] = useState(false);
+	const [buy, setBuy] = useState(false);
 	const purchaseRef = useRef();
-	const [userId, setUserId] = useState();
 	const [days, setDays] = useState(1);
 	const [purchaseAmount, setPurchaseAmount] = useState(0);
 	const [loading, setLoading] = useState(false);
+	const [shares, setShares] = useState();
 	const closeModal = () => {
 		setModal(!modal);
 	};
 
-	const auth = getAuth();
-	onAuthStateChanged(auth, (user) => {
-		if (user) {
-			const uid = user.uid;
-			setUserId(uid);
-		} else {
-			setUserId(null);
-		}
-	});
 	useEffect(() => {
-		setApi(false);
-		return setApi(false);
-	}, []);
+		currentUser &&
+			portApi
+				.showPortfolio(currentUser.uid)
+				.then((res) => setPortfolio(res.coins));
+	}, [currentUser]);
 
 	const handleChange = (e) => {
 		setPurchaseAmount(
@@ -36,22 +38,46 @@ const CustomModal = ({ setModal, modal, id, targetCoin }) => {
 		);
 	};
 	const handleSubmit = () => {
-		setApi(false);
+		setBuy(false);
 		setLoading(true);
 		portApi.postPortfolio(
 			{
-				owner: userId,
+				owner: currentUser.uid,
 				title: targetCoin.name,
 				ppc: targetCoin.market_data.current_price.usd,
 				shares: purchaseAmount,
 				geckoId: targetCoin.id,
 			},
 
-			userId
+			currentUser.uid
 		);
 		setModal(!modal);
 	};
-	api && handleSubmit();
+	console.log(purchaseAmount);
+	const getShares = async (portfolio) => {
+		let holder = await portfolio?.filter(
+			(coin) => coin.geckoId === targetCoin?.id
+		)[0];
+		return holder;
+	};
+
+	const handleSell = () => {
+		setSell(false);
+		setLoading(true);
+		portApi.sellCoin(
+			{
+				shares: purchaseAmount,
+				coin_id: shares._id,
+			},
+
+			currentUser.uid
+		);
+		setModal(!modal);
+	};
+
+	targetCoin && getShares(portfolio).then((res) => setShares(res));
+	buy && handleSubmit();
+	sell && handleSell();
 	return (
 		<Modal show={targetCoin && modal}>
 			<ModalHeader style={{ textAlign: 'center' }}>
@@ -92,24 +118,51 @@ const CustomModal = ({ setModal, modal, id, targetCoin }) => {
 				</Button>
 
 				<Form>
-					<Form.Group className='mb-3' controlId='formBasicEmail'>
-						<Form.Label>Purchase Amount </Form.Label>
-						<Form.Control
-							onChange={handleChange}
-							ref={purchaseRef}
-							placeholder='Enter amount in USD'
-						/>
-						<Form.Text className='text-muted'>
-							You are purchasing {purchaseAmount.toFixed(3)}{' '}
-							{`${targetCoin && targetCoin.name} `}
-							at {targetCoin && targetCoin.market_data.current_price.usd}$ per
-							coin
-						</Form.Text>
-					</Form.Group>
-
-					<Button variant='success' onClick={() => setApi(true)}>
-						Checkout
-					</Button>
+					{buySell === 'sell' ? (
+						<Form.Group className='mb-3'>
+							<Form.Label>
+								{' '}
+								You own {shares ? shares.shares : 0} shares of
+								{` ${targetCoin?.name}`}{' '}
+							</Form.Label>
+							<Form.Control
+								onChange={handleChange}
+								ref={purchaseRef}
+								placeholder='Enter sell amount in USD'
+							/>
+							<Form.Text className='text-muted'>
+								You are selling {purchaseAmount.toFixed(3)}{' '}
+								{`${targetCoin && targetCoin.name} `}
+								at {targetCoin && targetCoin.market_data.current_price.usd}$ per
+								coin
+							</Form.Text>
+						</Form.Group>
+					) : (
+						<Form.Group className='mb-3'>
+							<Form.Label>Purchase Amount </Form.Label>
+							<Form.Control
+								onChange={handleChange}
+								ref={purchaseRef}
+								placeholder='Enter amount in USD'
+							/>
+							<Form.Text className='text-muted'>
+								You are purchasing {purchaseAmount.toFixed(3)}{' '}
+								{`${targetCoin && targetCoin.name} `}
+								at {targetCoin && targetCoin.market_data.current_price.usd}$ per
+								coin
+							</Form.Text>
+						</Form.Group>
+					)}
+					{/* modal does not allow event to be prevented for a submit button */}
+					{buySell === 'sell' ? (
+						<Button variant='danger' onClick={() => setSell(true)}>
+							Sell
+						</Button>
+					) : (
+						<Button variant='success' onClick={() => setBuy(true)}>
+							Checkout
+						</Button>
+					)}
 				</Form>
 			</ModalBody>
 		</Modal>

@@ -1,22 +1,12 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import * as portApi from '../apiCalls/portfolioCalls';
-import * as api from '../apiCalls/coingecko';
-import { Container, Row, Col, Button } from 'react-bootstrap';
-
+import { Container, Row, Col } from 'react-bootstrap';
 import PortfolioChart from '../Chart/PortfolioChart';
-const Portfolio = ({ currentUser, allCoins, setAllCoins }) => {
+const Portfolio = ({ currentUser, allCoins, input }) => {
 	const [target, setTarget] = useState(null);
-
 	const [portfolio, setPortfolio] = useState();
-	let arr = [];
-	const getAllCoins = async (data) => {
-		for (let i = 0; i < data.length; i++) {
-			const num = await api.getCoinById(data[i].geckoId);
-			arr.push(num);
-		}
-		return arr;
-	};
+
 	useEffect(() => {
 		currentUser &&
 			portApi.showPortfolio(currentUser.uid).then((res) => setPortfolio(res));
@@ -44,6 +34,7 @@ const Portfolio = ({ currentUser, allCoins, setAllCoins }) => {
 				</Row>
 				{portfolio &&
 					portfolio.coins.map((coin, i) => {
+						console.log(coin);
 						return (
 							<Row
 								onClick={() => setTarget(coin.title)}
@@ -60,10 +51,11 @@ const Portfolio = ({ currentUser, allCoins, setAllCoins }) => {
 									style={{
 										color:
 											allCoins &&
-											allCoins[i].market_data.current_price > coin.ppc
+											allCoins[i].market_data.current_price.usd > coin.ppc
 												? 'green'
 												: 'red',
 									}}>
+									{console.log(allCoins[i].market_data.current_price)}
 									{coin.ppc}
 								</Col>
 								<Col>{coin.shares && coin.shares.toFixed(3)}</Col>

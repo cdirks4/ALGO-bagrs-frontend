@@ -2,3 +2,9 @@
 	margin-right: 6;
 	padding-left: 100;
 }
+span.title.navbar-brand:hover {
+	color: lightblue;
+}
+span.title.navbar-brand {
+	color: grey;
+}

@@ -1,19 +1,16 @@
 import { useEffect, useState } from 'react';
-import { Form, Col, Row, Button, FormControl } from 'react-bootstrap';
-import { Doughnut, Line } from 'react-chartjs-2';
-import { getAuth } from 'firebase/auth';
-import * as portApi from '../apiCalls/portfolioCalls';
+import { Line } from 'react-chartjs-2';
 import * as api from '../apiCalls/coingecko';
 
 const PortfolioChart = ({ portfolio, target, setTarget }) => {
 	const [chartData, setChartData] = useState();
 	const [days, setDays] = useState(30);
-	const [total, setTotal] = useState();
 	let usersMarketValue = null;
 	let marketValueObj = {};
 	let labels = [];
 	let arr = [];
 	let titleArray = [];
+
 	const findTotalPortfolio = (data) => {
 		const obj = {};
 		for (const key in data) {
@@ -26,7 +23,6 @@ const PortfolioChart = ({ portfolio, target, setTarget }) => {
 				}
 			}
 		}
-
 		for (const key in obj) {
 			arr.push(obj[key]);
 		}
@@ -41,7 +37,6 @@ const PortfolioChart = ({ portfolio, target, setTarget }) => {
 			});
 			marketValueObj[data[i].title] = usersMarketValue;
 		}
-
 		return marketValueObj;
 	};
 	chartData && findTotalPortfolio(chartData);
@@ -52,7 +47,6 @@ const PortfolioChart = ({ portfolio, target, setTarget }) => {
 		portfolio && getChartData(portfolio.coins).then((res) => setChartData(res));
 	}, [portfolio, target]);
 	console.log(chartData);
-
 	return (
 		target && (
 			<>
@@ -81,20 +75,11 @@ const PortfolioChart = ({ portfolio, target, setTarget }) => {
 							},
 						],
 						options: {
-							scales: {
-								x: {
-									title: {
-										display: true,
-										text: 'Month',
-									},
-								},
-							},
 							parsing: {
 								xAxisKey: 'x',
 								yAxisKey: 'y',
 							},
 							ticks: {
-								// forces step size to be 50 units
 								stepSize: 50,
 							},
 						},

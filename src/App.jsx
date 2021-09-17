@@ -43,7 +43,7 @@ const App = () => {
 			</Switch>
 			<Switch>
 				<Route path='/coinchart'>
-					<CoinChart input={input} />
+					<CoinChart input={input} currentUser={currentUser} />
 				</Route>
 			</Switch>
 			<Switch>
@@ -75,6 +75,7 @@ const App = () => {
 			<Switch>
 				<Route path='/portfolio'>
 					<Portfolio
+						input={input}
 						currentUser={currentUser}
 						setCurrentUser={setCurrentUser}
 						allCoins={allCoins}

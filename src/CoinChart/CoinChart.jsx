@@ -6,19 +6,15 @@ import './CoinChart.css';
 import { getAuth } from 'firebase/auth';
 import CustomModal from '../Modal/CustomModal';
 
-const CoinChart = ({ input }) => {
+const CoinChart = ({ input, currentUser }) => {
 	const [loading, setLoading] = useState(false);
 	const [id, setId] = useState();
 	const [coins, setCoins] = useState();
-	const [currentUser, setCurrentUser] = useState();
 	const [page, setPage] = useState(1);
 	const auth = getAuth();
 	const [modal, setModal] = useState(false);
 	const [targetCoin, setTargetCoin] = useState(null);
-
-	auth.onAuthStateChanged((user) => {
-		user ? setCurrentUser(user) : setCurrentUser(null);
-	});
+	const [buySell, setBuySell] = useState();
 
 	useEffect(() => {
 		api.getCoins(page).then((res) => setCoins(res));
@@ -41,6 +37,7 @@ const CoinChart = ({ input }) => {
 	};
 
 	const toggleModal = async (e) => {
+		setBuySell(e.target.value);
 		setId(e.target.id);
 		const coin = await api.getCoinById(e.target.id);
 		setModal(true);
@@ -50,7 +47,7 @@ const CoinChart = ({ input }) => {
 	return (
 		<>
 			<Container
-				className='border border-light mt-4 rounded'
+				className='border border-secondary mt-4 rounded'
 				style={{ color: 'black' }}>
 				<Row className='border-bottom d-flex align-items-center'>
 					<Col>
@@ -149,10 +146,19 @@ const CoinChart = ({ input }) => {
 									<Col>
 										<Button
 											variant='secondary'
+											value='buy'
 											size='sm'
 											onClick={toggleModal}
 											id={coin.id}>
 											buy
+										</Button>
+										<Button
+											variant='danger'
+											size='sm'
+											value='sell'
+											onClick={toggleModal}
+											id={coin.id}>
+											sell
 										</Button>
 									</Col>
 								</Row>
@@ -161,10 +167,12 @@ const CoinChart = ({ input }) => {
 				)}
 			</Container>
 			<CustomModal
+				buySell={buySell}
 				setModal={setModal}
 				modal={modal}
 				id={id}
 				targetCoin={targetCoin}
+				currentUser={currentUser}
 			/>
 			<nav>
 				<ul class='pagination justify-content-center'>

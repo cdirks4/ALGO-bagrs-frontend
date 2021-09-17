@@ -19,10 +19,10 @@ const Chart = ({ id, days }) => {
 	let arr = [];
 	const createAxis = (data, days) => {
 		for (let i = 0; i < data.length; i++) {
-			if (days == 1) {
-				arr = new Array();
-			} else if (days >= 31) {
+			if (days >= 31) {
 				arr.push(`${i}d`);
+			} else if (days == 1) {
+				arr.push(`${i * 5}m`);
 			} else {
 				arr.push(`${i}hr`);
 			}
