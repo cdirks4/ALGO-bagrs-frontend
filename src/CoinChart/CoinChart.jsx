@@ -116,13 +116,13 @@ const CoinChart = ({ input }) => {
 						.map((coin) => {
 							return (
 								<Row className='border-bottom d-flex align-items-center'>
+									<Col className='w-20 '>
+										<img src={coin.image} alt={coin.name} className='logo' />
+									</Col>
 									<Col className=''>
 										<Link to={`/details/${coin.id}`}>
 											{coin.symbol.toUpperCase()}
 										</Link>
-									</Col>
-									<Col className='w-20 '>
-										<img src={coin.image} alt={coin.name} className='logo' />
 									</Col>
 									<Col className=''>#{coin.market_cap_rank}</Col>
 									<Col className=''>{coin.current_price}</Col>

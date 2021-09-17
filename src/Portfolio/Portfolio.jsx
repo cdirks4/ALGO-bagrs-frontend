@@ -33,11 +33,14 @@ const Portfolio = ({ currentUser, allCoins, setAllCoins }) => {
 				target={target}
 				setTarget={setTarget}
 			/>
-			<Container className='border border-light mt-4 rounded'>
+			<Container className='border border-secondary mt-4 rounded'>
 				<Row className='border-bottom d-flex align-items-center'>
-					<Col>Coin</Col>
+					<Col></Col>
+					<Col></Col>
 					<Col>Average Cost</Col>
 					<Col>Shares</Col>
+					<Col>Market Value</Col>
+					<Col>24hr high</Col>
 				</Row>
 				{portfolio &&
 					portfolio.coins.map((coin, i) => {
@@ -45,10 +48,38 @@ const Portfolio = ({ currentUser, allCoins, setAllCoins }) => {
 							<Row
 								onClick={() => setTarget(coin.title)}
 								className='border-bottom d-flex align-items-center'>
-								<Col>{coin.title}</Col>
-								<Col>{coin.ppc}</Col>
+								<Col>
+									<img
+										src={allCoins && allCoins[i].image?.small}
+										alt={allCoins && allCoins[i].name}
+										className='logo'
+									/>
+								</Col>
+								<Col>{allCoins && allCoins[i].symbol.toUpperCase()}</Col>
+								<Col
+									style={{
+										color:
+											allCoins &&
+											allCoins[i].market_data.current_price > coin.ppc
+												? 'green'
+												: 'red',
+									}}>
+									{coin.ppc}
+								</Col>
 								<Col>{coin.shares && coin.shares.toFixed(3)}</Col>
-								<Col>{allCoins && allCoins[i].name}</Col>
+								<Col>
+									{allCoins &&
+										`$${(
+											allCoins[i].market_data.current_price.usd * coin.shares
+										).toFixed(2)}`}
+								</Col>
+
+								<Col>
+									{allCoins &&
+										`$${(
+											allCoins[i].market_data.high_24h.usd * coin.shares
+										).toFixed(2)}`}
+								</Col>
 							</Row>
 						);
 					})}

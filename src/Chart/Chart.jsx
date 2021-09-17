@@ -19,7 +19,9 @@ const Chart = ({ id, days }) => {
 	let arr = [];
 	const createAxis = (data, days) => {
 		for (let i = 0; i < data.length; i++) {
-			if (days >= 30) {
+			if (days == 1) {
+				arr = new Array();
+			} else if (days >= 31) {
 				arr.push(`${i}d`);
 			} else {
 				arr.push(`${i}hr`);
@@ -28,9 +30,10 @@ const Chart = ({ id, days }) => {
 		arr.reverse();
 	};
 	useEffect(() => {
-		let interval = 'hourly';
-
-		if (days >= 30) {
+		let interval = 'minutely';
+		if (days > 1) {
+			interval = 'hourly';
+		} else if (days >= 30) {
 			interval = 'daily';
 		}
 		api
