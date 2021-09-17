@@ -54,6 +54,12 @@ const CoinChart = ({ input }) => {
 				style={{ color: 'black' }}>
 				<Row className='border-bottom d-flex align-items-center'>
 					<Col>
+						<div id='name' style={{ color: 'black' }}></div>
+					</Col>
+					<Col>
+						<div style={{ color: 'black' }}></div>
+					</Col>
+					<Col>
 						<div
 							className='link'
 							id='market_cap_rank'
@@ -61,14 +67,6 @@ const CoinChart = ({ input }) => {
 							style={{ color: 'black' }}>
 							Market Cap
 						</div>
-					</Col>
-					<Col>
-						<div id='name' style={{ color: 'black' }}>
-							Symbol
-						</div>
-					</Col>
-					<Col>
-						<div style={{ color: 'black' }}>Logo</div>
 					</Col>
 					<Col>
 						<div
@@ -118,15 +116,15 @@ const CoinChart = ({ input }) => {
 						.map((coin) => {
 							return (
 								<Row className='border-bottom d-flex align-items-center'>
-									<Col className=''>#{coin.market_cap_rank}</Col>
-									<Col className='w-20 '>
-										<img src={coin.image} alt={coin.name} className='logo' />
-									</Col>
 									<Col className=''>
 										<Link to={`/details/${coin.id}`}>
 											{coin.symbol.toUpperCase()}
 										</Link>
 									</Col>
+									<Col className='w-20 '>
+										<img src={coin.image} alt={coin.name} className='logo' />
+									</Col>
+									<Col className=''>#{coin.market_cap_rank}</Col>
 									<Col className=''>{coin.current_price}</Col>
 									<Col
 										className=''

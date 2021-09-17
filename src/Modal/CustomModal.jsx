@@ -37,6 +37,7 @@ const CustomModal = ({ setModal, modal, id, targetCoin }) => {
 	};
 	const handleSubmit = () => {
 		setApi(false);
+		setLoading(true);
 		portApi.postPortfolio(
 			{
 				owner: userId,
@@ -48,7 +49,7 @@ const CustomModal = ({ setModal, modal, id, targetCoin }) => {
 
 			userId
 		);
-		setLoading(true);
+		setModal(!modal);
 	};
 	api && handleSubmit();
 	return (
@@ -57,12 +58,38 @@ const CustomModal = ({ setModal, modal, id, targetCoin }) => {
 				{targetCoin && targetCoin.name}
 			</ModalHeader>
 			<ModalBody>
-				<Button onClick={closeModal}>x</Button>
+				<Button onClick={closeModal} variant='danger'>
+					x
+				</Button>
 				<Chart id={id} days={days} />
-				<Button onClick={() => setDays(1)}>1d</Button>
-				<Button onClick={() => setDays(7)}>7d</Button>
-				<Button onClick={() => setDays(30)}>30d</Button>
-				<Button onClick={() => setDays(365)}>1y</Button>
+				<Button
+					onClick={() => setDays(1)}
+					className='m-1'
+					size='sm'
+					variant='secondary'>
+					1d
+				</Button>
+				<Button
+					onClick={() => setDays(7)}
+					className='m-1'
+					size='sm'
+					variant='secondary'>
+					7d
+				</Button>
+				<Button
+					onClick={() => setDays(30)}
+					className='m-1'
+					size='sm'
+					variant='secondary'>
+					30d
+				</Button>
+				<Button
+					onClick={() => setDays(365)}
+					className='m-1'
+					size='sm'
+					variant='secondary'>
+					1y
+				</Button>
 
 				<Form>
 					<Form.Group className='mb-3' controlId='formBasicEmail'>
@@ -80,7 +107,7 @@ const CustomModal = ({ setModal, modal, id, targetCoin }) => {
 						</Form.Text>
 					</Form.Group>
 
-					<Button variant='primary' onClick={() => setApi(true)}>
+					<Button variant='success' onClick={() => setApi(true)}>
 						Checkout
 					</Button>
 				</Form>
