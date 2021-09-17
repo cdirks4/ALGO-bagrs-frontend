@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Container } from 'react-bootstrap';
 import Signup from './Signup/Signup';
 import { Switch, Route } from 'react-router-dom';
@@ -8,15 +8,19 @@ import NavbarComponent from './Navbar/NavbarComponent';
 import Portfolio from './Portfolio/Portfolio';
 import { getAuth } from 'firebase/auth';
 import CoinDetails from './CoinDetails/CoinDetails';
+import * as portApi from './apiCalls/portfolioCalls';
 const App = () => {
 	const [currentUser, setCurrentUser] = useState(null);
 	const [input, setInput] = useState('');
 	const auth = getAuth();
-
+	const [portfolio, setPortfolio] = useState();
 	auth.onAuthStateChanged((user) => {
 		user ? setCurrentUser(user) : setCurrentUser(null);
 	});
-
+	useEffect(() => {
+		currentUser &&
+			portApi.showPortfolio(currentUser.uid).then((res) => setPortfolio(res));
+	}, [currentUser]);
 	return (
 		<>
 			<Switch>
@@ -60,6 +64,8 @@ const App = () => {
 					<Portfolio
 						currentUser={currentUser}
 						setCurrentUser={setCurrentUser}
+						portfolio={portfolio}
+						setPortfolio={setPortfolio}
 					/>
 				</Route>
 			</Switch>
