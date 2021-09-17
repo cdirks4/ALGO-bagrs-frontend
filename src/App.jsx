@@ -9,18 +9,31 @@ import Portfolio from './Portfolio/Portfolio';
 import { getAuth } from 'firebase/auth';
 import CoinDetails from './CoinDetails/CoinDetails';
 import * as portApi from './apiCalls/portfolioCalls';
+import * as api from './apiCalls/coingecko';
 const App = () => {
 	const [currentUser, setCurrentUser] = useState(null);
 	const [input, setInput] = useState('');
 	const auth = getAuth();
-	const [portfolio, setPortfolio] = useState();
+	const [allCoins, setAllCoins] = useState();
 	auth.onAuthStateChanged((user) => {
 		user ? setCurrentUser(user) : setCurrentUser(null);
 	});
+	const arr = [];
+	const getAllCoins = async (data) => {
+		for (let i = 0; i < data.length; i++) {
+			const num = await api.getCoinById(data[i].geckoId);
+			arr.push(num);
+		}
+		return arr;
+	};
 	useEffect(() => {
 		currentUser &&
-			portApi.showPortfolio(currentUser.uid).then((res) => setPortfolio(res));
+			portApi
+				.showPortfolio(currentUser.uid)
+				.then((res) => getAllCoins(res.coins))
+				.then((res) => setAllCoins(res));
 	}, [currentUser]);
+
 	return (
 		<>
 			<Switch>
@@ -64,8 +77,7 @@ const App = () => {
 					<Portfolio
 						currentUser={currentUser}
 						setCurrentUser={setCurrentUser}
-						portfolio={portfolio}
-						setPortfolio={setPortfolio}
+						allCoins={allCoins}
 					/>
 				</Route>
 			</Switch>
