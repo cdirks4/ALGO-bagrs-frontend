@@ -5,7 +5,7 @@ import { Container, Row, Col, Button } from 'react-bootstrap';
 import './CoinChart.css';
 import { getAuth } from 'firebase/auth';
 import CustomModal from '../Modal/CustomModal';
-
+import SignInModal from '../Modal/SignInModal';
 const CoinChart = ({ input, currentUser }) => {
 	const [loading, setLoading] = useState(false);
 	const [id, setId] = useState();
@@ -15,7 +15,7 @@ const CoinChart = ({ input, currentUser }) => {
 	const [modal, setModal] = useState(false);
 	const [targetCoin, setTargetCoin] = useState(null);
 	const [buySell, setBuySell] = useState();
-
+	const [signInOpen, setSignInOpen] = useState(false);
 	useEffect(() => {
 		api.getCoins(page).then((res) => setCoins(res));
 	}, [page]);
@@ -166,6 +166,7 @@ const CoinChart = ({ input, currentUser }) => {
 						})
 				)}
 			</Container>
+
 			<CustomModal
 				buySell={buySell}
 				setModal={setModal}

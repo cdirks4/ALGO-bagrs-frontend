@@ -25,7 +25,7 @@ const Portfolio = ({ currentUser, allCoins }) => {
 			/>
 			<Container className='border border-secondary mt-4 rounded'>
 				<Row className='border-bottom d-flex align-items-center'>
-					<Col></Col>
+					<Col>Chart View</Col>
 					<Col></Col>
 					<Col>Average Cost</Col>
 					<Col>Shares</Col>
@@ -38,9 +38,9 @@ const Portfolio = ({ currentUser, allCoins }) => {
 							<Row
 								onClick={() => setTarget(coin.title)}
 								className='border-bottom d-flex align-items-center'>
-								{/* <Col>
+								<Col>
 									<img
-										src={''}
+										src={allCoins && allCoins[i]?.image.small}
 										alt={allCoins && allCoins[i]?.name}
 										className='logo'
 									/>
@@ -55,9 +55,9 @@ const Portfolio = ({ currentUser, allCoins }) => {
 												: 'red',
 									}}>
 									{coin.ppc}
-								</Col> */}
+								</Col>
 								<Col>{coin.shares && coin.shares.toFixed(3)}</Col>
-								{/* <Col>
+								<Col>
 									{allCoins &&
 										`$${(
 											allCoins[i].market_data.current_price.usd * coin.shares
@@ -69,7 +69,7 @@ const Portfolio = ({ currentUser, allCoins }) => {
 										`$${(
 											allCoins[i].market_data.high_24h.usd * coin.shares
 										).toFixed(2)}`}
-								</Col> */}
+								</Col>
 							</Row>
 						);
 					})}

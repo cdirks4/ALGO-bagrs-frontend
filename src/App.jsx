@@ -10,8 +10,9 @@ import { getAuth } from 'firebase/auth';
 import CoinDetails from './CoinDetails/CoinDetails';
 import * as portApi from './apiCalls/portfolioCalls';
 import * as api from './apiCalls/coingecko';
-import { setCurrentScreen } from '@firebase/analytics';
+import SignInModal from './Modal/SignInModal';
 const App = () => {
+	const [signUp, setSignUp] = useState(false);
 	const [currentUser, setCurrentUser] = useState(null);
 	const [input, setInput] = useState('');
 	const auth = getAuth();
@@ -39,15 +40,19 @@ const App = () => {
 		<>
 			<Switch>
 				<Route path='/'>
-					<NavbarComponent input={input} setInput={setInput} />
+					<NavbarComponent
+						input={input}
+						setInput={setInput}
+						setSignUp={setSignUp}
+					/>
 				</Route>
 			</Switch>
 			<Switch>
-				<Route path='/coinchart'>
+				<Route exact path='/'>
 					<CoinChart input={input} currentUser={currentUser} />
 				</Route>
 			</Switch>
-			<Switch>
+			{/* <Switch>
 				<Route exact path='/'>
 					<Container
 						className='d-flex align-items-center justify-content-center'
@@ -59,8 +64,8 @@ const App = () => {
 						</div>
 					</Container>
 				</Route>
-			</Switch>
-			<Switch>
+			</Switch> */}
+			{/* <Switch>
 				<Route path='/signin'>
 					<Container
 						className='d-flex align-items-center justify-content-center'
@@ -75,7 +80,7 @@ const App = () => {
 						</div>
 					</Container>
 				</Route>
-			</Switch>
+			</Switch> */}
 			<Switch>
 				<Route path='/portfolio'>
 					<Portfolio
@@ -91,6 +96,11 @@ const App = () => {
 					<CoinDetails />
 				</Route>
 			</Switch>
+			<SignInModal
+				currentUser={currentUser}
+				signUp={signUp}
+				setSignUp={setSignUp}
+			/>
 		</>
 	);
 };

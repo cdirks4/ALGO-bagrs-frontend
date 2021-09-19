@@ -1,6 +1,6 @@
 export const postPortfolio = async (userData, id) => {
 	try {
-		const res = await fetch(`http://localhost:3000/api/portfolio/`, {
+		const res = await fetch(`https://algobagrs.herokuapp.com/api/portfolio/`, {
 			method: 'POST',
 			headers: { 'Content-type': 'application/json;charset=UTF-8' },
 
@@ -13,7 +13,7 @@ export const postPortfolio = async (userData, id) => {
 };
 
 export const showPortfolio = (id) => {
-	return fetch(`http://localhost:3000/api/portfolio/${id}`, {
+	return fetch(`https://algobagrs.herokuapp.com/api/portfolio/${id}`, {
 		method: 'GET',
 		headers: { 'Content-type': 'application/json;charset=UTF-8' },
 	}).then((res) => res.json());

@@ -8,13 +8,28 @@ import {
 	FormControl,
 	Button,
 	Col,
+	NavItem,
 } from 'react-bootstrap';
-
+import { getAuth, signOut } from 'firebase/auth';
 import { Link } from 'react-router-dom';
 import './Navbar.css';
-const NavbarComponent = ({ input, setInput }) => {
+const NavbarComponent = ({ input, setInput, setSignUp }) => {
 	const handleChange = (e) => {
 		setInput(e.target.value);
+	};
+
+	const auth = getAuth();
+	const userSignOut = () => {
+		setSignUp(false);
+		signOut(auth)
+			.then((res) => {
+				// Sign-out successful.
+				console.log(res);
+			})
+			.catch((error) => {
+				console.log(error);
+				// An error happened.
+			});
 	};
 	return (
 		<>
@@ -31,7 +46,7 @@ const NavbarComponent = ({ input, setInput }) => {
 						<Col className='md-4'>
 							<Nav className='me-auto'>
 								<Nav.Link>
-									<Link to='/coinchart' style={{ color: 'white' }}>
+									<Link to='/' style={{ color: 'white' }}>
 										Global Chart
 									</Link>
 								</Nav.Link>
@@ -56,6 +71,13 @@ const NavbarComponent = ({ input, setInput }) => {
 							</Form>
 						</Col>
 					</Row>
+					<NavItem>
+						<p
+							onClick={() => userSignOut()}
+							style={{ fontSize: '8px', color: 'grey' }}>
+							sign out
+						</p>
+					</NavItem>
 				</Navbar>
 			</>
 		</>

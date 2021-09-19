@@ -4,11 +4,7 @@ import { Form, Button, Card, Container, Spinner } from 'react-bootstrap';
 import { useHistory } from 'react-router';
 import app from '../firebase';
 import { Link } from 'react-router-dom';
-import {
-	getAuth,
-	signInWithEmailAndPassword,
-	sendEmailVerification,
-} from 'firebase/auth';
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 
 const Signin = ({ currentUser, setCurrentUser }) => {
 	const [loading, setLoading] = useState(false);
@@ -35,8 +31,6 @@ const Signin = ({ currentUser, setCurrentUser }) => {
 		} catch (error) {
 			setLoading(false);
 			setError(error.message);
-			const errorCode = error.code;
-			const errorMessage = error.message;
 		}
 	};
 
