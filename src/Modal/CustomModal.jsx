@@ -40,6 +40,8 @@ const CustomModal = ({
 	const handleSubmit = () => {
 		portApi.postPortfolio(
 			{
+				image: targetCoin.symbol,
+				symbol: targetCoin.image.small,
 				owner: currentUser.uid,
 				title: targetCoin.name,
 				ppc: targetCoin.market_data.current_price.usd,
@@ -61,12 +63,14 @@ const CustomModal = ({
 	};
 
 	const handleSell = () => {
+		console.log(targetCoin);
 		setSell(false);
 		setLoading(true);
 		portApi.sellCoin(
 			{
+				title: targetCoin.name,
 				shares: purchaseAmount,
-				coin_id: shares._id,
+				coin_id: targetCoin.id,
 			},
 
 			currentUser.uid

@@ -28,7 +28,10 @@ const App = () => {
 		}
 		return arr;
 	};
+
 	useEffect(() => {
+		api.getCoins().then((res) => setAllCoins(res));
+
 		currentUser &&
 			portApi
 				.showPortfolio(currentUser.uid)
