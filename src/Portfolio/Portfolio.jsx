@@ -26,7 +26,7 @@ const Portfolio = ({ currentUser, allCoins }) => {
 
 		return arr;
 	};
-
+	console.log(portfolio);
 	return (
 		<>
 			<PortfolioChart
@@ -43,7 +43,9 @@ const Portfolio = ({ currentUser, allCoins }) => {
 					<Col>Shares</Col>
 					<Col></Col>
 				</Row>
-				{portfolio &&
+				{!portfolio ? (
+					<h1> You have not yet made a purchase</h1>
+				) : (
 					portfolio.coins?.map((coin, i) => {
 						return (
 							<Row className='border-bottom d-flex align-items-center'>
@@ -68,7 +70,8 @@ const Portfolio = ({ currentUser, allCoins }) => {
 								<Col></Col>
 							</Row>
 						);
-					})}
+					})
+				)}
 			</Container>
 		</>
 	);
