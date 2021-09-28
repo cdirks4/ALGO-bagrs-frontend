@@ -54,7 +54,6 @@ const PortfolioChart = ({ portfolio, target, setTarget }) => {
 			getChartData(portfolio?.coins).then((res) => setChartData(res));
 		}
 	}, [portfolio, target]);
-	console.log(chartData);
 	return (
 		target && (
 			<>

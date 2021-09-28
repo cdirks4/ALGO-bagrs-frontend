@@ -26,7 +26,7 @@ const Portfolio = ({ currentUser, allCoins }) => {
 
 		return arr;
 	};
-	console.log(portfolio);
+
 	return (
 		<>
 			<PortfolioChart
@@ -67,7 +67,7 @@ const Portfolio = ({ currentUser, allCoins }) => {
 								{/*   */}
 								<Col>{coin.shares && coin.shares.toFixed(3)} </Col>
 
-								<Col></Col>
+								<Col>{console.log(currentCoin[i][0])}</Col>
 							</Row>
 						);
 					})
