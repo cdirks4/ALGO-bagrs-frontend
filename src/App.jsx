@@ -21,22 +21,22 @@ const App = () => {
 		user ? setCurrentUser(user) : setCurrentUser(null);
 	});
 	const arr = [];
-	// const getAllCoins = async (data) => {
-	// 	for (let i = 0; i < data?.length; i++) {
-	// 		const num = await api.getCoinById(data[i].geckoId);
-	// 		arr.push(num);
-	// 	}
-	// 	return arr;
-	// };
+	const getAllCoins = async (data) => {
+		for (let i = 0; i < data?.length; i++) {
+			const num = await api.getCoinById(data[i].geckoId);
+			arr.push(num);
+		}
+		return arr;
+	};
 
 	useEffect(() => {
-		api.getCoins().then((res) => setAllCoins(res));
-		console.log(allCoins);
-		// currentUser &&
-		// 	portApi
-		// 		.showPortfolio(currentUser.uid)
-		// 		.then((res) => getAllCoins(res?.coins))
-		// 		.then((res) => setAllCoins(res));
+		// api.getCoins().then((res) => setAllCoins(res));
+		// console.log(allCoins);
+		currentUser &&
+			portApi
+				.showPortfolio(currentUser.uid)
+				.then((res) => getAllCoins(res?.coins))
+				.then((res) => setAllCoins(res));
 	}, [currentUser]);
 
 	return (
@@ -91,6 +91,7 @@ const App = () => {
 						currentUser={currentUser}
 						setCurrentUser={setCurrentUser}
 						allCoins={allCoins}
+						setAllCoins={setAllCoins}
 					/>
 				</Route>
 			</Switch>

@@ -3,25 +3,37 @@ import { Link } from 'react-router-dom';
 import * as portApi from '../apiCalls/portfolioCalls';
 import { Container, Row, Col } from 'react-bootstrap';
 import PortfolioChart from '../Chart/PortfolioChart';
-const Portfolio = ({ currentUser, allCoins }) => {
+const Portfolio = ({ currentUser, allCoins, setAllCoins }) => {
 	const [target, setTarget] = useState(null);
 	const [portfolio, setPortfolio] = useState(null);
 	const [currentCoin, setCurrentCoin] = useState();
+	console.log(allCoins);
 	useEffect(() => {
 		currentUser &&
 			portApi.showPortfolio(currentUser.uid).then((res) => setPortfolio(res));
-		portfolio &&
-			findCurrentCoin(portfolio, allCoins).then((res) => setCurrentCoin(res));
-	}, [currentUser, allCoins]);
+		// portfolio &&
+		// 	portfolio.coins.map((coin) => {
+		// 		// allCoins.filter((indCoin) => console.log(indCoin));
+		// 		setAllCoins(
+		// 			allCoins.filter((indCoin) => {
+		// 				if (indCoin.id == coin.geckoId?.toLowerCase()) {
+		// 					return coin;
+		// 				}
+		// 			})
+		// 		);
+		// 	});
+	}, [currentUser]);
 	let arr = [];
 
 	const findCurrentCoin = async (data, allCoins) => {
 		arr = await data.coins.map((coin) => {
-			return allCoins.filter((allcoin) => {
-				if (allcoin.id == coin.geckoId?.toLowerCase()) {
-					return coin;
-				}
-			});
+			setAllCoins(
+				allCoins.filter((allcoin) => {
+					if (allcoin.id == coin.geckoId?.toLowerCase()) {
+						return coin;
+					}
+				})
+			);
 		});
 
 		return arr;
@@ -41,7 +53,7 @@ const Portfolio = ({ currentUser, allCoins }) => {
 
 					<Col>Average Cost</Col>
 					<Col>Shares</Col>
-					<Col></Col>
+					<Col> Market Value</Col>
 				</Row>
 				{!portfolio ? (
 					<h1> You have not yet made a purchase</h1>
@@ -66,8 +78,21 @@ const Portfolio = ({ currentUser, allCoins }) => {
 
 								{/*   */}
 								<Col>{coin.shares && coin.shares.toFixed(3)} </Col>
-
-								<Col>{console.log(currentCoin[i][0])}</Col>
+								{console.log(
+									allCoins[i].market_data.current_price.usd > coin.ppc
+								)}
+								<Col
+									style={{
+										color:
+											allCoins[i].market_data.current_price.usd > coin.ppc
+												? 'green'
+												: 'red',
+									}}>
+									{allCoins &&
+										(
+											allCoins[i].market_data.current_price.usd * coin.shares
+										).toFixed(2)}
+								</Col>
 							</Row>
 						);
 					})
